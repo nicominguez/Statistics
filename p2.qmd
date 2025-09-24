@@ -1,0 +1,596 @@
+---
+title: "Práctica 2"
+author: "Nicolás Mínguez Aguirre"
+format:
+  html:
+    theme: cosmo
+    # css: ../lab_styles.css
+    toc: true
+    toc-location: left
+    code-fold: true
+    code-copy: true
+---
+
+```{r}
+#| include: false
+library(car)
+library(pROC)
+library(nortest)
+library(ggplot2)
+files <- list.files("Datos_Lab_2", full.names = TRUE)
+lapply(files, load, .GlobalEnv)
+```
+
+------------------------------------------------------------------------
+
+------------------------------------------------------------------------
+
+# Inferencia con Dos Variables Aleatorias
+
+## Ejercicio 1
+
+$$
+\begin{aligned}
+X = \text{\{Duracion de organizacion del algoritmo A en segundos\}}\\
+Y = \text{\{Duracion de organizacion del algoritmo B en segundos\}}
+\end{aligned}
+$$
+
+### Con Variables Aleatorias **Pareadas**
+
+Considerar $X$ e $Y$ como variables pareadas equivale a probar ambos algoritmos con la misma lista y ver cuál es más rápido. Se repite esto con 60 listas distintas, de modo que si una lista es difícil, lo es para los dos, y la comparación resulta justa. Se define la diferencia de tiempo en los algoritmos con una nueva variable aleatoria: $$
+D=X-Y=\text{\{Diferencia de duracion de organizacion entre los algoritmos A y B en segundos\}}
+$$ Se comprueba que $D$ sigue una distribución normal: Se define la hipótesis: $$
+\begin{aligned}
+H_0: \mu_D = 0\\H_1: \mu_D \neq 0
+\end{aligned}
+$$
+
+Luego el contraste:
+
+```{r}
+t.test(confuso$a, confuso$b,alternative="two.sided", paired=TRUE, conf.level = 0.95)
+```
+
+Se tiene que el p-valor es menor que el nivel de significación. Existen pruebas significativas para rechazar la hipótesis nula con una confianza del 95%. Por lo tanto, se asume la hipótesis alternativa; los algoritmos de organización no tardan lo mismo en organizar listas de números.
+
+Se debería escoger el algoritmo de la V.A. $Y$.
+
+### Con Variables Aleatorias **Independientes**
+
+Considerar $X$ e $Y$ como variables independientes equivale a tomar 60 muestras independientes para cada algoritmo. Así, habrá dos muestras distintas, cada una con una media y varianza muestral. Este contraste es peor, ya que puede dar la casualidad de que las 60 listas que organiza un algoritmo sean más difíciles que las de el otro algoritmo. Primero separamos los resultados en dos muestras independientes, es decir, ahora cada lista no tiene dos muestras (una de cada algoritmo), sino solo una: Se define la hipótesis: $$
+\begin{aligned}
+H_0: \mu_X = \mu_Y \Rightarrow \mu_X - \mu_Y = 0\\H_1: \mu_X \neq \mu_Y \Rightarrow \mu_X - \mu_Y \neq 0
+\end{aligned}
+$$ Y se hace el contraste:
+
+```{r}
+t.test(c(confuso[,1],confuso[,2])~c(rep("a", 60), rep("b", 60)), alternative = "two.sided", conf.level = 0.95)
+```
+
+Se obtiene un p-valor inferior al nivel de significación $\alpha$, luego se vuelve a rechazar la hipótesis nula con una confianza del 95%, por lo tanto, se asume la hipótesis alternativa; los algoritmos de organización no tadrdan lo mismo en organizar listas de números.
+
+Otra vez, se debería escoger el algoritmo de la V.A. $Y$.
+
+------------------------------------------------------------------------
+
+## Ejercicio 2
+
+$$
+\begin{aligned}
+X=\text{\{Cantidad de mercurio en los peces de el curso medio de un río en mg\}}\\
+Y=\text{\{Cantidad de mercurio en los peces de la desembocadura de un río en mg\}}
+\end{aligned}
+$$
+
+Al ser dos variables aleatorias **independientes**, se procede a escrbir los datos con una sola muestra por pez. Los peces que se cogen en una zona del río no son los mismos peces que se cogen en otra zona del río.
+
+Se toman dos muestras, cada una de tamaño $n_X=n_Y=35\,\text{peces}$.
+
+```{r}
+peces <- data.frame(
+  "mercurio" = c(1.64, 1.67,  1.85, 1.57, 1.59, 1.61, 1.53, 1.4, 1.7, 1.48,1.46, 1.74, 1.67,
+    1.57, 1.65, 1.48, 1.47, 1.64, 1.79, 1.69, 1.54, 1.71, 1.57, 1.51, 1.54, 1.52, 1.57, 1.67,
+    1.47, 1.64, 1.74, 1.62, 1.69, 1.59, 1.85,1.56, 1.55, 1.69, 1.67, 1.6, 1.68, 1.65, 1.59,
+    1.75, 1.49, 1.69, 1.48, 1.62, 1.48, 1.7, 1.65, 1.67, 1.69, 1.76, 1.59, 1.61, 1.67, 1.69,
+    1.53, 1.57, 1.62, 1.42, 1.71, 1.54, 1.71, 1.56, 1.67, 1.68, 1.6, 1.66),
+  "lugar" = c(rep("medio", 35), rep("desembocadura", 35))
+)
+peces[c(1:4, 67:70),]
+```
+
+Comprobamos la normalidad de las muestras de $X$ e $Y$:
+
+```{r message=FALSE}
+qqPlot(peces$mercurio[peces$lugar == "medio"], distribution = "norm") #muestra de X
+qqPlot(peces$mercurio[peces$lugar == "desembocadura"], distribution = "norm") #muestra de Y
+```
+
+Vemos que ambas muestras son normales. La hipótesis: $$
+\begin{aligned}
+H_0: \mu_X = \mu_Y \Rightarrow \mu_X - \mu_Y = 0\\
+H_1: \mu_X \neq \mu_Y \Rightarrow \mu_X - \mu_Y \neq 0
+\end{aligned}
+$$ Luego el contraste:
+
+```{r}
+t.test(mercurio ~ lugar, data = peces, alternative="two.sided", conf.leve = 0.95)
+```
+
+Este contraste da un p-valor mayor que el nivel de significación, por lo tanto se acepta $H_0$, es decir, no existen pruebas significativas para rechazar la hipótesis nula. Se acepta, por lo tanto, que la media de cantidad de mercurio en los peces del medio del río y los peces de la desembocadura del río son iguales.
+
+------------------------------------------------------------------------
+
+## Ejercicio 3
+
+$$
+\begin{aligned}
+X=\text{\{Nivel de cloro en la cabecera del embalse en mg/L\}}\\
+Y=\text{\{Nivel de cloro en la cola del embalse en mg/L\}}
+\end{aligned}
+$$ En este caso, estamos interesados en la diferencia del nivel de cloro que hay en dos partes del mismo embalse. Es decir, se toman dos muestras por cada embalse, luego $X$ e $Y$ son variables aleatorias que consideraremos **pareadas**. Se define la diferencia de nivel de cloro en la cabecera y la cola de un embalse con una nueva variable aleatoria:\
+$$
+D=X-Y=\text{\{Diferencia de nivel de cloro entre la cabecera y la cola de un embalse en mg/L\}}
+$$ Se toma una muestra i.i.d. de $D$ de tamaño $n_D=10$ listas de números. La muestra es:
+
+```{r}
+cloro_cabecera <- c(11.6, 29.2, 16.7, 37.8, 33.9, 12.2, 5.9, 18.5, 20.4, 10.1)
+cloro_cola <- c(34.5, 11.8, 21.6, 40.2, 34.1, 12.5, 12.9, 24.5, 21.7, 18.6)
+  
+d <- data.frame(
+  row.names = 1:10,
+  "cloro_cabecera" = cloro_cabecera,
+  "cloro_cola" = cloro_cola,
+  "diferencia_cloro" = cloro_cabecera - cloro_cola
+)
+d
+```
+
+Comprobamos que la muestra $d$ está distribuida como una normal:
+
+```{r}
+qqPlot(d$diferencia_cloro, distribution = "norm")
+```
+
+Efectivamente, la muestra tiene una distribución normal. Se plantea la hipótesis: $$
+\begin{aligned}
+H_0: \mu_D = 0\\H_1: \mu_D \neq 0
+\end{aligned}
+$$ Y el contraste:
+
+```{r}
+t.test(cloro_cabecera, cloro_cola, data = d, alternative = "two.sided", paired = TRUE, conf.level = 0.95)
+```
+
+El contraste da un p-valor mayor que el nivel de significación. No existen pruebas significativas para rechazar la hipótesis nula con un nivel de confianza del 95%. Por tanto se acepta que el nivel de cloro en la cabecera y la cola de un embalse es igual.
+
+------------------------------------------------------------------------
+
+## Ejercicio 4
+
+### a.)
+
+$$
+\begin{aligned}
+X=\text{\{Proporción de personas que escogen el grupo A de música como su favorito hace 2 años\}}\\
+Y=\text{\{Proporción de personas que escogen el grupo A de música como su favorito actual\}}
+\end{aligned}
+$$ Consideramos estas variables aleatorias **independientes** ya que las personas de las encuestas no son las mismas. El tamaño de las muestras y las proporciones muestrales correspondientes son: $$
+\begin{aligned}
+n_X = 1000, \quad p_X = \frac{274}{1000} \approx 0.274\\
+n_Y = 760, \quad p_Y = \frac{240}{760} \approx 0.316
+\end{aligned}
+$$ Vemos que se cumplen las condiciones del Teorema Central del Límite para ambas distribuciones: - $n_X>30$, $n_Y>30$ - Cada muestra es aleatoria simple, por lo que sus observaciones son i.i.d. dentro de cada grupo Entonces: $$
+\begin{aligned}
+\hat{p}_X \sim \mathcal{N}\!\bigl(\mu_{\hat{p}_X} = \pi_X,\; \sigma_{\hat{p}_X} = \sqrt{\tfrac{\pi_X(1-\pi_X)}{n_X}}\bigr), \\ \hat{p}_Y \sim \mathcal{N}\!\bigl(\mu_{\hat{p}_Y} = \pi_Y,\; \sigma_{\hat{p}_Y} = \sqrt{\tfrac{\pi_Y(1-\pi_Y)}{n_Y}}\bigr)
+\end{aligned}
+$$ Con lo que se considera el contraste de la diferencia de estas normales: $$
+\begin{aligned}
+H_0: \pi_X = \pi_Y \Rightarrow \pi_X - \pi_Y = 0\\
+H_1: \pi_X \neq \pi_Y \Rightarrow \pi_X - \pi_Y \neq 0
+\end{aligned}
+$$ Usamos los estimadores $\hat{p}$ para los parámetros poblacionales $\pi$ para ambas poblaciones, $X$ e $Y$. Desde aquí R se encarga de estandarizar la diferencia de las dos normales y de hacer el contraste:
+
+```{r}
+prop.test(x = c(274, 240), n = c(1000, 760), alternative = "two.sided", conf.level = 0.95)
+```
+
+El contraste da un p-valor mayor que el nivel de significación. No existen pruebas significativas para rechazar la hipótesis nula con un nivel de confianza del 95%. Por tanto se acepta que la proporción poblacional sobre si el grupo A es el grupo favorito no ha cambiado desde hace 2 años.
+
+### b.)
+
+$$
+\begin{aligned}
+X=\text{\{Proporción de mujeres hace 2 años\}}\\
+Y=\text{\{Proporción de mujeres actual\}}
+\end{aligned}
+$$ Se utiliza el un contraste bilateral para la hipótesis: $$
+\begin{aligned}
+H_0​:π_X​=π_Y​\\H_1​:π_Y​>π_X​,
+\end{aligned}
+$$ Es decir:
+
+```{r}
+prop.test(x = c(0.337, 0.362), n = c(1, 1), alternative = "greater", conf.level = 0.95)
+```
+
+Se obtiene un p-valor igual al nivel de significación, por lo que no se rechaza y en su defecto se asume la hipótesis nula.
+
+------------------------------------------------------------------------
+
+------------------------------------------------------------------------
+
+# Potencia. Curva ROC.
+
+El mejor valor para tomar la decisión propuesta es el 170.605 mg de Glucosa.
+
+------------------------------------------------------------------------
+
+------------------------------------------------------------------------
+
+# Contraste Chi-Cuadrado de Bondad de Ajuste
+
+## Ejercicio 1
+
+Definimos la variable aleatoria, que en este caso es una multinomial, es decir, esta compuesta por $i$ binomiales.
+
+$$
+X=X_1,...,X_6=\text{\{Proporción de M&Ms del color (i)\}}
+$$
+
+La hipótesis:
+
+$$
+H_0: \text{# M&Ms marrones}=n*0.3,\quad\text{# M&Ms amarillos}=n*0.2,\quad...\quad,\quad\text{# M&Ms beige}=n*0.1
+$$
+
+o, también se podría decir
+
+$$
+H_0: \pi_{\text{marrón}}=0.3,\quad\pi_{\text{amarillo}}=0.2,\quad...\quad,\quad\pi_{\text{beige}}=0.1
+$$
+
+Luego
+
+$$
+H_1: \pi_{\text{marrón}}\neq0.3,\quad\pi_{\text{amarillo}}\neq0.2,\quad...\quad,\quad\pi_{\text{beige}}\neq0.1
+$$
+
+Al tomar una muestra de tamaño $n$, se tiene:
+
+|          |        |          |      |         |       |       |
+|----------|--------|----------|------|---------|-------|-------|
+|          | Marrón | Amarillo | Rojo | Naranja | Verde | Beige |
+| Expected | 111    | 74       | 74   | 37      | 37    | 37    |
+| Observed | 84     | 79       | 75   | 79      | 36    | 47    |
+
+Y hacemos el contraste de Chi-Cuadrado, donde el estadístico observado es
+
+$$
+\chi^2_{\text{obs}} = \sum_{i=1}^{6} \frac{(O_i - E_i)^2}{E_i}\approx50.775
+$$
+
+```{r}
+chisq.test(x = c(84,79,75,79,36,47), p = c(0.3,0.2,0.2,0.1,0.1,0.1))
+```
+
+Simplemente mirando los resultados del experimento, se sospecha que la muestra no viene de una distribución con las proporciones dadas. Vemos que el contraste da un p-valor significativamente menor que un nivel de significación, digamos del 0.05, luego se rechaza la hipótesis nula.
+
+## Ejercicio 2
+
+Se considera la variable aleatoria:
+
+$$
+X=\text{\{Dirección en grados en la que una paloma vuela al estar desorientada\}}
+$$
+
+El contraste sugerido es:
+
+$$
+H_0: X\sim\mathcal{U}(a=0, b=360)
+$$
+
+Y para hacer el contraste, lo escribimos de una forma equivalente que nos es más útil. Como esta en realidad es simplemente otra forma más general de decir que todas las direcciones son equiprobables:
+
+$$
+H_0: p_{[0,45)}=1/8,\quad p_{(45,90)}=1/8,\quad...,\quad p_{(315,360)}=1/8
+$$
+
+Nóteste que en este caso $p$ no es una proporción muestral, sino la probabilidad que $X$ tome un valor en el rango indicado.
+
+Luego la hipótesis alternativa:
+
+$$
+H_1:  \text{Alguna dirección no sale 1/8 de las veces}
+$$
+
+o, de forma equivalente,
+
+$$
+H_1: p_{[0,45)}\neq1/8,\quad p_{(45,90)}\neq1/8,\quad...,\quad p_{(315,360)}\neq1/8
+$$
+
+Con los datos observados y esperados hacemos el contraste:
+
+```{r}
+chisq.test(x = c(12,16,17,15,13,20,17,10), p = rep(0.125,8))
+```
+
+Se acepta la hipótesis nula ya que $\alpha<\text{p-value}$.
+
+## Ejercicio 3
+
+La V.A.:
+
+$$
+X=\text{\{Color de la semilla producida (roja, amarilla o blanca)\}}
+$$
+
+Las hipótesis:
+
+$$
+\begin{aligned}
+H_0: p_{\text{roja}}=9/16,\quad p_{\text{amarilla}}=3/16,\quad p_{\text{blanca}}=4/16\\
+H_1: p_{\text{roja}}\neq9/16,\quad p_{\text{amarilla}}\neq3/16,\quad p_{\text{blanca}}\neq4/16
+\end{aligned}
+$$
+
+El contraste:
+
+```{r}
+chisq.test(x = c(195, 73, 100), p = c(9/16, 3/16, 4/16))
+```
+
+Si $\alpha=0.05$ se acepta la hipótesis nula. Realmente 9:3:4 es la proporción de los colores de las semillas.
+
+------------------------------------------------------------------------
+
+------------------------------------------------------------------------
+
+# Función de Dist. Empírica y Contrastes de Normalidad
+
+## Ejercicio 4
+
+### a.)
+
+Definimos la V.A.:
+
+$$
+X=\text{\{Diámetro de tornillos en mm\}}
+$$
+
+Y las hipótesis:
+
+$$
+\begin{aligned}
+H_0: X\sim\mathcal{N}(\mu=0.5,\sigma=0.002)\\
+H_1: X\nsim\mathcal{N}(\mu=0.5,\sigma=0.002)
+\end{aligned}
+$$
+
+Se toma una m.a.s. de $X$ de tamaño $n=45$. Nos interesa comprobar que la muestra sigue una distribución normal. Para hacernos una idea, dibujemos la muestra:
+
+```{r}
+densityPlot(T1_IV_3b$C1,
+            main = "Distribución de diámetros de tornillos",
+            xlab = "Diámetro (mm)",
+            ylab = "Densidad de probabilidad")
+```
+
+Parece ser normal. Para comprobarlo, se podría visualizar con `qqPlot`, pero es más adecuado recurrir a otros métodos más rigurosos. Dado que $n<50$, solo podemos usar el contraste de Shapiro-Wilk:
+
+```{r}
+shapiro.test(T1_IV_3b$C1)
+```
+
+Este nos da un p-valor menor que $\alpha=0.05$, luego se rechaza la hipótesis nula y se concluye que la muestra no procede de una distribución normal.
+
+### b.)
+
+Añadimos los datos:
+
+```{r}
+data <- c(T1_IV_3b$C1, c(0.33, 0.67, 0.78, 0.93, 0.45, 0.73))
+```
+
+Ahora $n=51$, es decir, $n>50$, luego estamos en condiciones para utilizar el contraste de Kolmogorov-Smirnov.
+
+```{r}
+#| warning: false
+ks.test(data, "pnorm", mean = 0.5, sd = 0.002)
+```
+
+Obtenemos un p-valor mayor que el nivel de significación. Aceptamos la hipótesis nula, es decir, la muestra procede de una normal $\mathcal{N}(\mu=0.5,\sigma=0.002)$.
+
+Hagamos la visualizacion cumulativa de la distribución empírica vs. teórica:
+
+```{r}
+ecdf_data <- ecdf(data)
+
+plot(ecdf_data,
+     main = "Distribución empírica vs Normal teórica (CDF)",
+     xlab = "Diámetro (mm)",
+     ylab = "Probabilidad acumulada",
+     col = "blue", lwd = 2)
+
+curve(pnorm(x, mean = 0.5, sd = 0.002),
+      col = "red", 
+      lwd = 2, 
+      add = TRUE)
+
+legend("bottomright",
+       legend = c("Empírica", "Normal teórica"),
+       col = c("blue", "red"),
+       lwd = 2)
+
+```
+
+Vemos que con los datos iniciales de la muestra de tamaño $n=45$, no eramos capaces de confirmar al 95% de confianza que la muestra procedía de una distribución normal usando un contraste Shapiro-Wilk. Pero, al aumentar el tamaño de la muestra a $n=51$, con el contraste Kolmogorov-Smirnov, se hace una Función de Dist. Empírca (`ecdf`) cuya Función Cumulativa de Densidad (CMF) es suficientemente parecida a la CMF de una normal, con lo que con un 95% de confianza, se concluye que la muestra efectivamente viene de una distribución normal.
+
+Nótese que al aumentar el tamaño muestra $n$, nos aproximamos más a la distribución real de la población. Esto quiere decir que cuando el tamaño de la muestra aumenta, hemos tomado una decisión más correcta.
+
+## Ejercicio 5
+
+```{r}
+data_a <- T1_IV_5
+data_b <- T1_IV_6
+data_c <- T1_IV_7
+```
+
+### a.)
+
+Sea
+
+$$
+X=\text{\{Rigidez de flexión de una muestra de tela\}}
+$$
+
+```{r}
+length(data_a$C1)
+```
+
+Vemos que la muestra de X tiene tamaño $n=23$. Primero visualizamos la distribución de la muestra:
+
+```{r}
+densityPlot(data_a$C1, xlab="Rigidez")
+```
+
+Como $n$ es menor que 50, comprobamos si sigue una normal mediante el contraste Shapiro-Wilk:
+
+```{r}
+shapiro.test(data_a$C1)
+```
+
+Este contraste no nos garantiza que la muestra proceda de una normal. Hacemos una transformación, teniendo en cuenta que la rigidez siempre tendrá un valor positivo. Usaremos la transformación Box-Cox. Primero hallamos $\lambda$:
+
+```{r}
+boxcox_fit <- powerTransform(data_a$C1)
+lambda <- boxcox_fit$lambda
+print(lambda)
+```
+
+Aplicamos la transformacion a la muestra:
+
+```{r}
+transformed_data_a <- (data_a$C1^lambda - 1) / lambda
+```
+
+Volvemos a visualizar y hacer el contraste Shapiro-Wilk:
+
+```{r}
+shapiro.test(transformed_data_a)
+densityPlot(transformed_data_a)
+```
+
+En este caso, la transformación logra que la muestra siga una distribución normal.
+
+Por último, analizamos la presencia de valores anómalos en los datos originales con los correspondientes datos tipificados (z-scores), donde los anomalos serán los que z\>3:
+
+```{r}
+z_scores_a <- scale(transformed_data_a)
+data.frame(valor_transformado = transformed_data_a, valor_original = data_a$C1, z_score = z_scores_a, anomalo = abs(z_scores_a) > 3)
+```
+
+### b.)
+
+Sea
+
+$$
+X=\text{\{Resistencia a la fractura de una placa de acero con 18% de niquel\}}
+$$
+
+Primero, analizamos el tamaño de la muestra y su distribución.
+
+```{r}
+length(data_b$C1)
+densityPlot(data_b$C1, xlab="Resistencia")
+```
+
+La muestra de Y tiene un tamaño $n=25$. Realizamos el contraste de normalidad de Shapiro-Wilk:
+
+```{r}
+shapiro.test(data_b$C1)
+```
+
+Este contraste no nos garantiza que la muestra proceda de una normal. Hacemos una transformación, teniendo en cuenta que la resistencia siempre tendrá un valor positivo. Usaremos la transformación Box-Cox. Primero hallamos $\lambda$:
+
+```{r}
+boxcox_fit <- powerTransform(data_b$C1)
+lambda <- boxcox_fit$lambda
+print(lambda)
+```
+
+Aplicamos la transformacion a la muestra:
+
+```{r}
+transformed_data_b <- (data_b$C1^lambda - 1) / lambda
+```
+
+Volvemos a visualizar y hacer el contraste Shapiro-Wilk:
+
+```{r}
+shapiro.test(transformed_data_b)
+densityPlot(transformed_data_b)
+```
+
+En este caso, la transformación logra que la muestra siga una distribución normal.
+
+Por último, analizamos la presencia de valores anómalos en los datos originales con los correspondientes datos tipificados (z-scores), donde los anomalos serán los que z\>3:
+
+```{r}
+z_scores_b <- scale(transformed_data_b)
+data.frame(valor_transformado = transformed_data_b, valor_original = data_b$C1, z_score = z_scores_b, anomalo = abs(z_scores_b) > 3)
+```
+
+### c.)
+
+Sea
+
+$$
+X=\text{\{Resistencia a la flexión de muestras de cemento complementadas con arcilla quemada\}}
+$$ Primero, analizamos el tamaño de la muestra y su distribución.
+
+```{r}
+length(data_c$C1)
+densityPlot(data_c$C1, xlab="Resistencia")
+```
+
+La muestra de Y tiene un tamaño $n=30$. Realizamos el contraste de normalidad de Shapiro-Wilk:
+
+```{r}
+shapiro.test(data_c$C1)
+```
+
+Este contraste no nos garantiza que la muestra proceda de una normal. Hacemos una transformación, teniendo en cuenta que la resistencia siempre tendrá un valor positivo. Usaremos la transformación Box-Cox. Primero hallamos $\lambda$:
+
+```{r}
+boxcox_fit <- powerTransform(data_c$C1)
+lambda <- boxcox_fit$lambda
+print(lambda)
+```
+
+Aplicamos la transformacion a la muestra:
+
+```{r}
+transformed_data_c <- (data_c$C1^lambda - 1) / lambda
+```
+
+Volvemos a visualizar y hacer el contraste Shapiro-Wilk:
+
+```{r}
+shapiro.test(transformed_data_c)
+densityPlot(transformed_data_c)
+```
+
+En este caso, la transformación logra que la muestra siga una distribución normal.
+
+Por último, analizamos la presencia de valores anómalos en los datos originales con los correspondientes datos tipificados (z-scores), donde los anomalos serán los que z\>3:
+
+```{r}
+z_scores_c <- scale(transformed_data_c)
+data.frame(valor_transformado = transformed_data_c, valor_original = data_c$C1, z_score = z_scores_c, anomalo = abs(z_scores_c) > 3)
+```
+
+::: {#Lab and Data} [Lab_02.Rmd](https://miaulario.unavarra.es/access/content/group/2025_0_504202_1_G/Tema%201/Lab_2.Rmd)
+
+[Data_lab_02](https://miaulario.unavarra.es/access/content/group/2025_0_504202_1_G/Tema%201/Datos_Lab_2.zip) :::
