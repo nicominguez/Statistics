@@ -1,0 +1,1583 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.24">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Nicolás Mínguez Aguirre">
+
+<title>Práctica 2</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="p2_files/libs/clipboard/clipboard.min.js"></script>
+<script src="p2_files/libs/quarto-html/quarto.js" type="module"></script>
+<script src="p2_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="p2_files/libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="p2_files/libs/quarto-html/popper.min.js"></script>
+<script src="p2_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="p2_files/libs/quarto-html/anchor.min.js"></script>
+<link href="p2_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="p2_files/libs/quarto-html/quarto-syntax-highlighting-dc55a5b9e770e841cd82e46aadbfb9b0.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="p2_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="p2_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="p2_files/libs/bootstrap/bootstrap-0f9f7490fdc41efd1abaa8c23df3f716.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="quarto-light">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article toc-left">
+<div id="quarto-sidebar-toc-left" class="sidebar toc-left">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#inferencia-con-dos-variables-aleatorias" id="toc-inferencia-con-dos-variables-aleatorias" class="nav-link active" data-scroll-target="#inferencia-con-dos-variables-aleatorias">Inferencia con Dos Variables Aleatorias</a>
+  <ul class="collapse">
+  <li><a href="#ejercicio-1" id="toc-ejercicio-1" class="nav-link" data-scroll-target="#ejercicio-1">Ejercicio 1</a>
+  <ul class="collapse">
+  <li><a href="#con-variables-aleatorias-pareadas" id="toc-con-variables-aleatorias-pareadas" class="nav-link" data-scroll-target="#con-variables-aleatorias-pareadas">Con Variables Aleatorias <strong>Pareadas</strong></a></li>
+  <li><a href="#con-variables-aleatorias-independientes" id="toc-con-variables-aleatorias-independientes" class="nav-link" data-scroll-target="#con-variables-aleatorias-independientes">Con Variables Aleatorias <strong>Independientes</strong></a></li>
+  </ul></li>
+  <li><a href="#ejercicio-2" id="toc-ejercicio-2" class="nav-link" data-scroll-target="#ejercicio-2">Ejercicio 2</a></li>
+  <li><a href="#ejercicio-3" id="toc-ejercicio-3" class="nav-link" data-scroll-target="#ejercicio-3">Ejercicio 3</a></li>
+  <li><a href="#ejercicio-4" id="toc-ejercicio-4" class="nav-link" data-scroll-target="#ejercicio-4">Ejercicio 4</a>
+  <ul class="collapse">
+  <li><a href="#a." id="toc-a." class="nav-link" data-scroll-target="#a.">a.)</a></li>
+  <li><a href="#b." id="toc-b." class="nav-link" data-scroll-target="#b.">b.)</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#potencia.-curva-roc." id="toc-potencia.-curva-roc." class="nav-link" data-scroll-target="#potencia.-curva-roc.">Potencia. Curva ROC.</a></li>
+  <li><a href="#contraste-chi-cuadrado-de-bondad-de-ajuste" id="toc-contraste-chi-cuadrado-de-bondad-de-ajuste" class="nav-link" data-scroll-target="#contraste-chi-cuadrado-de-bondad-de-ajuste">Contraste Chi-Cuadrado de Bondad de Ajuste</a>
+  <ul class="collapse">
+  <li><a href="#ejercicio-1-1" id="toc-ejercicio-1-1" class="nav-link" data-scroll-target="#ejercicio-1-1">Ejercicio 1</a></li>
+  <li><a href="#ejercicio-2-1" id="toc-ejercicio-2-1" class="nav-link" data-scroll-target="#ejercicio-2-1">Ejercicio 2</a></li>
+  <li><a href="#ejercicio-3-1" id="toc-ejercicio-3-1" class="nav-link" data-scroll-target="#ejercicio-3-1">Ejercicio 3</a></li>
+  </ul></li>
+  <li><a href="#función-de-dist.-empírica-y-contrastes-de-normalidad" id="toc-función-de-dist.-empírica-y-contrastes-de-normalidad" class="nav-link" data-scroll-target="#función-de-dist.-empírica-y-contrastes-de-normalidad">Función de Dist. Empírica y Contrastes de Normalidad</a>
+  <ul class="collapse">
+  <li><a href="#ejercicio-4-1" id="toc-ejercicio-4-1" class="nav-link" data-scroll-target="#ejercicio-4-1">Ejercicio 4</a>
+  <ul class="collapse">
+  <li><a href="#a.-1" id="toc-a.-1" class="nav-link" data-scroll-target="#a.-1">a.)</a></li>
+  <li><a href="#b.-1" id="toc-b.-1" class="nav-link" data-scroll-target="#b.-1">b.)</a></li>
+  </ul></li>
+  <li><a href="#ejercicio-5" id="toc-ejercicio-5" class="nav-link" data-scroll-target="#ejercicio-5">Ejercicio 5</a>
+  <ul class="collapse">
+  <li><a href="#a.-2" id="toc-a.-2" class="nav-link" data-scroll-target="#a.-2">a.)</a></li>
+  <li><a href="#b.-2" id="toc-b.-2" class="nav-link" data-scroll-target="#b.-2">b.)</a></li>
+  <li><a href="#c." id="toc-c." class="nav-link" data-scroll-target="#c.">c.)</a></li>
+  </ul></li>
+  </ul></li>
+  </ul>
+</nav>
+</div>
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Práctica 2</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Nicolás Mínguez Aguirre </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<hr>
+<hr>
+<section id="inferencia-con-dos-variables-aleatorias" class="level1">
+<h1>Inferencia con Dos Variables Aleatorias</h1>
+<section id="ejercicio-1" class="level2">
+<h2 class="anchored" data-anchor-id="ejercicio-1">Ejercicio 1</h2>
+<p><span class="math display">\[
+\begin{aligned}
+X = \text{\{Duracion de organizacion del algoritmo A en segundos\}}\\
+Y = \text{\{Duracion de organizacion del algoritmo B en segundos\}}
+\end{aligned}
+\]</span></p>
+<section id="con-variables-aleatorias-pareadas" class="level3">
+<h3 class="anchored" data-anchor-id="con-variables-aleatorias-pareadas">Con Variables Aleatorias <strong>Pareadas</strong></h3>
+<p>Considerar <span class="math inline">\(X\)</span> e <span class="math inline">\(Y\)</span> como variables pareadas equivale a probar ambos algoritmos con la misma lista y ver cuál es más rápido. Se repite esto con 60 listas distintas, de modo que si una lista es difícil, lo es para los dos, y la comparación resulta justa. Se define la diferencia de tiempo en los algoritmos con una nueva variable aleatoria: <span class="math display">\[
+D=X-Y=\text{\{Diferencia de duracion de organizacion entre los algoritmos A y B en segundos\}}
+\]</span> Se comprueba que <span class="math inline">\(D\)</span> sigue una distribución normal: Se define la hipótesis: <span class="math display">\[
+\begin{aligned}
+H_0: \mu_D = 0\\H_1: \mu_D \neq 0
+\end{aligned}
+\]</span></p>
+<p>Luego el contraste:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(confuso<span class="sc">$</span>a, confuso<span class="sc">$</span>b,<span class="at">alternative=</span><span class="st">"two.sided"</span>, <span class="at">paired=</span><span class="cn">TRUE</span>, <span class="at">conf.level =</span> <span class="fl">0.95</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Paired t-test
+
+data:  confuso$a and confuso$b
+t = -2.2311, df = 59, p-value = 0.02949
+alternative hypothesis: true mean difference is not equal to 0
+95 percent confidence interval:
+ -0.43483170 -0.02364272
+sample estimates:
+mean difference 
+     -0.2292372 </code></pre>
+</div>
+</div>
+<p>Se tiene que el p-valor es menor que el nivel de significación. Existen pruebas significativas para rechazar la hipótesis nula con una confianza del 95%. Por lo tanto, se asume la hipótesis alternativa; los algoritmos de organización no tardan lo mismo en organizar listas de números.</p>
+<p>Se debería escoger el algoritmo de la V.A. <span class="math inline">\(Y\)</span>.</p>
+</section>
+<section id="con-variables-aleatorias-independientes" class="level3">
+<h3 class="anchored" data-anchor-id="con-variables-aleatorias-independientes">Con Variables Aleatorias <strong>Independientes</strong></h3>
+<p>Considerar <span class="math inline">\(X\)</span> e <span class="math inline">\(Y\)</span> como variables independientes equivale a tomar 60 muestras independientes para cada algoritmo. Así, habrá dos muestras distintas, cada una con una media y varianza muestral. Este contraste es peor, ya que puede dar la casualidad de que las 60 listas que organiza un algoritmo sean más difíciles que las de el otro algoritmo. Primero separamos los resultados en dos muestras independientes, es decir, ahora cada lista no tiene dos muestras (una de cada algoritmo), sino solo una: Se define la hipótesis: <span class="math display">\[
+\begin{aligned}
+H_0: \mu_X = \mu_Y \Rightarrow \mu_X - \mu_Y = 0\\H_1: \mu_X \neq \mu_Y \Rightarrow \mu_X - \mu_Y \neq 0
+\end{aligned}
+\]</span> Y se hace el contraste:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(<span class="fu">c</span>(confuso[,<span class="dv">1</span>],confuso[,<span class="dv">2</span>])<span class="sc">~</span><span class="fu">c</span>(<span class="fu">rep</span>(<span class="st">"a"</span>, <span class="dv">60</span>), <span class="fu">rep</span>(<span class="st">"b"</span>, <span class="dv">60</span>)), <span class="at">alternative =</span> <span class="st">"two.sided"</span>, <span class="at">conf.level =</span> <span class="fl">0.95</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Welch Two Sample t-test
+
+data:  c(confuso[, 1], confuso[, 2]) by c(rep("a", 60), rep("b", 60))
+t = -2.256, df = 64.095, p-value = 0.02749
+alternative hypothesis: true difference in means between group a and group b is not equal to 0
+95 percent confidence interval:
+ -0.43222550 -0.02624892
+sample estimates:
+mean in group a mean in group b 
+      0.5536680       0.7829052 </code></pre>
+</div>
+</div>
+<p>Se obtiene un p-valor inferior al nivel de significación <span class="math inline">\(\alpha\)</span>, luego se vuelve a rechazar la hipótesis nula con una confianza del 95%, por lo tanto, se asume la hipótesis alternativa; los algoritmos de organización no tadrdan lo mismo en organizar listas de números.</p>
+<p>Otra vez, se debería escoger el algoritmo de la V.A. <span class="math inline">\(Y\)</span>.</p>
+<hr>
+</section>
+</section>
+<section id="ejercicio-2" class="level2">
+<h2 class="anchored" data-anchor-id="ejercicio-2">Ejercicio 2</h2>
+<p><span class="math display">\[
+\begin{aligned}
+X=\text{\{Cantidad de mercurio en los peces de el curso medio de un río en mg\}}\\
+Y=\text{\{Cantidad de mercurio en los peces de la desembocadura de un río en mg\}}
+\end{aligned}
+\]</span></p>
+<p>Al ser dos variables aleatorias <strong>independientes</strong>, se procede a escrbir los datos con una sola muestra por pez. Los peces que se cogen en una zona del río no son los mismos peces que se cogen en otra zona del río.</p>
+<p>Se toman dos muestras, cada una de tamaño <span class="math inline">\(n_X=n_Y=35\,\text{peces}\)</span>.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>peces <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"mercurio"</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="fl">1.64</span>, <span class="fl">1.67</span>,  <span class="fl">1.85</span>, <span class="fl">1.57</span>, <span class="fl">1.59</span>, <span class="fl">1.61</span>, <span class="fl">1.53</span>, <span class="fl">1.4</span>, <span class="fl">1.7</span>, <span class="fl">1.48</span>,<span class="fl">1.46</span>, <span class="fl">1.74</span>, <span class="fl">1.67</span>,</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="fl">1.57</span>, <span class="fl">1.65</span>, <span class="fl">1.48</span>, <span class="fl">1.47</span>, <span class="fl">1.64</span>, <span class="fl">1.79</span>, <span class="fl">1.69</span>, <span class="fl">1.54</span>, <span class="fl">1.71</span>, <span class="fl">1.57</span>, <span class="fl">1.51</span>, <span class="fl">1.54</span>, <span class="fl">1.52</span>, <span class="fl">1.57</span>, <span class="fl">1.67</span>,</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="fl">1.47</span>, <span class="fl">1.64</span>, <span class="fl">1.74</span>, <span class="fl">1.62</span>, <span class="fl">1.69</span>, <span class="fl">1.59</span>, <span class="fl">1.85</span>,<span class="fl">1.56</span>, <span class="fl">1.55</span>, <span class="fl">1.69</span>, <span class="fl">1.67</span>, <span class="fl">1.6</span>, <span class="fl">1.68</span>, <span class="fl">1.65</span>, <span class="fl">1.59</span>,</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="fl">1.75</span>, <span class="fl">1.49</span>, <span class="fl">1.69</span>, <span class="fl">1.48</span>, <span class="fl">1.62</span>, <span class="fl">1.48</span>, <span class="fl">1.7</span>, <span class="fl">1.65</span>, <span class="fl">1.67</span>, <span class="fl">1.69</span>, <span class="fl">1.76</span>, <span class="fl">1.59</span>, <span class="fl">1.61</span>, <span class="fl">1.67</span>, <span class="fl">1.69</span>,</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="fl">1.53</span>, <span class="fl">1.57</span>, <span class="fl">1.62</span>, <span class="fl">1.42</span>, <span class="fl">1.71</span>, <span class="fl">1.54</span>, <span class="fl">1.71</span>, <span class="fl">1.56</span>, <span class="fl">1.67</span>, <span class="fl">1.68</span>, <span class="fl">1.6</span>, <span class="fl">1.66</span>),</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="st">"lugar"</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="st">"medio"</span>, <span class="dv">35</span>), <span class="fu">rep</span>(<span class="st">"desembocadura"</span>, <span class="dv">35</span>))</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>peces[<span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>, <span class="dv">67</span><span class="sc">:</span><span class="dv">70</span>),]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>   mercurio         lugar
+1      1.64         medio
+2      1.67         medio
+3      1.85         medio
+4      1.57         medio
+67     1.67 desembocadura
+68     1.68 desembocadura
+69     1.60 desembocadura
+70     1.66 desembocadura</code></pre>
+</div>
+</div>
+<p>Comprobamos la normalidad de las muestras de <span class="math inline">\(X\)</span> e <span class="math inline">\(Y\)</span>:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">qqPlot</span>(peces<span class="sc">$</span>mercurio[peces<span class="sc">$</span>lugar <span class="sc">==</span> <span class="st">"medio"</span>], <span class="at">distribution =</span> <span class="st">"norm"</span>) <span class="co">#muestra de X</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="p2_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1]  3 35</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">qqPlot</span>(peces<span class="sc">$</span>mercurio[peces<span class="sc">$</span>lugar <span class="sc">==</span> <span class="st">"desembocadura"</span>], <span class="at">distribution =</span> <span class="st">"norm"</span>) <span class="co">#muestra de Y</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="p2_files/figure-html/unnamed-chunk-5-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 27 12</code></pre>
+</div>
+</div>
+<p>Vemos que ambas muestras son normales. La hipótesis: <span class="math display">\[
+\begin{aligned}
+H_0: \mu_X = \mu_Y \Rightarrow \mu_X - \mu_Y = 0\\
+H_1: \mu_X \neq \mu_Y \Rightarrow \mu_X - \mu_Y \neq 0
+\end{aligned}
+\]</span> Luego el contraste:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(mercurio <span class="sc">~</span> lugar, <span class="at">data =</span> peces, <span class="at">alternative=</span><span class="st">"two.sided"</span>, <span class="at">conf.leve =</span> <span class="fl">0.95</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Welch Two Sample t-test
+
+data:  mercurio by lugar
+t = 0.45752, df = 62.869, p-value = 0.6489
+alternative hypothesis: true difference in means between group desembocadura and group medio is not equal to 0
+95 percent confidence interval:
+ -0.03560432  0.05674717
+sample estimates:
+mean in group desembocadura         mean in group medio 
+                   1.622857                    1.612286 </code></pre>
+</div>
+</div>
+<p>Este contraste da un p-valor mayor que el nivel de significación, por lo tanto se acepta <span class="math inline">\(H_0\)</span>, es decir, no existen pruebas significativas para rechazar la hipótesis nula. Se acepta, por lo tanto, que la media de cantidad de mercurio en los peces del medio del río y los peces de la desembocadura del río son iguales.</p>
+<hr>
+</section>
+<section id="ejercicio-3" class="level2">
+<h2 class="anchored" data-anchor-id="ejercicio-3">Ejercicio 3</h2>
+<p><span class="math display">\[
+\begin{aligned}
+X=\text{\{Nivel de cloro en la cabecera del embalse en mg/L\}}\\
+Y=\text{\{Nivel de cloro en la cola del embalse en mg/L\}}
+\end{aligned}
+\]</span> En este caso, estamos interesados en la diferencia del nivel de cloro que hay en dos partes del mismo embalse. Es decir, se toman dos muestras por cada embalse, luego <span class="math inline">\(X\)</span> e <span class="math inline">\(Y\)</span> son variables aleatorias que consideraremos <strong>pareadas</strong>. Se define la diferencia de nivel de cloro en la cabecera y la cola de un embalse con una nueva variable aleatoria:<br>
+<span class="math display">\[
+D=X-Y=\text{\{Diferencia de nivel de cloro entre la cabecera y la cola de un embalse en mg/L\}}
+\]</span> Se toma una muestra i.i.d. de <span class="math inline">\(D\)</span> de tamaño <span class="math inline">\(n_D=10\)</span> listas de números. La muestra es:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>cloro_cabecera <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">11.6</span>, <span class="fl">29.2</span>, <span class="fl">16.7</span>, <span class="fl">37.8</span>, <span class="fl">33.9</span>, <span class="fl">12.2</span>, <span class="fl">5.9</span>, <span class="fl">18.5</span>, <span class="fl">20.4</span>, <span class="fl">10.1</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>cloro_cola <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">34.5</span>, <span class="fl">11.8</span>, <span class="fl">21.6</span>, <span class="fl">40.2</span>, <span class="fl">34.1</span>, <span class="fl">12.5</span>, <span class="fl">12.9</span>, <span class="fl">24.5</span>, <span class="fl">21.7</span>, <span class="fl">18.6</span>)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">row.names =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>,</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">"cloro_cabecera"</span> <span class="ot">=</span> cloro_cabecera,</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>  <span class="st">"cloro_cola"</span> <span class="ot">=</span> cloro_cola,</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>  <span class="st">"diferencia_cloro"</span> <span class="ot">=</span> cloro_cabecera <span class="sc">-</span> cloro_cola</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>d</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>   cloro_cabecera cloro_cola diferencia_cloro
+1            11.6       34.5            -22.9
+2            29.2       11.8             17.4
+3            16.7       21.6             -4.9
+4            37.8       40.2             -2.4
+5            33.9       34.1             -0.2
+6            12.2       12.5             -0.3
+7             5.9       12.9             -7.0
+8            18.5       24.5             -6.0
+9            20.4       21.7             -1.3
+10           10.1       18.6             -8.5</code></pre>
+</div>
+</div>
+<p>Comprobamos que la muestra <span class="math inline">\(d\)</span> está distribuida como una normal:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">qqPlot</span>(d<span class="sc">$</span>diferencia_cloro, <span class="at">distribution =</span> <span class="st">"norm"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="p2_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2 1</code></pre>
+</div>
+</div>
+<p>Efectivamente, la muestra tiene una distribución normal. Se plantea la hipótesis: <span class="math display">\[
+\begin{aligned}
+H_0: \mu_D = 0\\H_1: \mu_D \neq 0
+\end{aligned}
+\]</span> Y el contraste:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(cloro_cabecera, cloro_cola, <span class="at">data =</span> d, <span class="at">alternative =</span> <span class="st">"two.sided"</span>, <span class="at">paired =</span> <span class="cn">TRUE</span>, <span class="at">conf.level =</span> <span class="fl">0.95</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Paired t-test
+
+data:  cloro_cabecera and cloro_cola
+t = -1.1508, df = 9, p-value = 0.2795
+alternative hypothesis: true mean difference is not equal to 0
+95 percent confidence interval:
+ -10.706466   3.486466
+sample estimates:
+mean difference 
+          -3.61 </code></pre>
+</div>
+</div>
+<p>El contraste da un p-valor mayor que el nivel de significación. No existen pruebas significativas para rechazar la hipótesis nula con un nivel de confianza del 95%. Por tanto se acepta que el nivel de cloro en la cabecera y la cola de un embalse es igual.</p>
+<hr>
+</section>
+<section id="ejercicio-4" class="level2">
+<h2 class="anchored" data-anchor-id="ejercicio-4">Ejercicio 4</h2>
+<section id="a." class="level3">
+<h3 class="anchored" data-anchor-id="a.">a.)</h3>
+<p><span class="math display">\[
+\begin{aligned}
+X=\text{\{Proporción de personas que escogen el grupo A de música como su favorito hace 2 años\}}\\
+Y=\text{\{Proporción de personas que escogen el grupo A de música como su favorito actual\}}
+\end{aligned}
+\]</span> Consideramos estas variables aleatorias <strong>independientes</strong> ya que las personas de las encuestas no son las mismas. El tamaño de las muestras y las proporciones muestrales correspondientes son: <span class="math display">\[
+\begin{aligned}
+n_X = 1000, \quad p_X = \frac{274}{1000} \approx 0.274\\
+n_Y = 760, \quad p_Y = \frac{240}{760} \approx 0.316
+\end{aligned}
+\]</span> Vemos que se cumplen las condiciones del Teorema Central del Límite para ambas distribuciones: - <span class="math inline">\(n_X&gt;30\)</span>, <span class="math inline">\(n_Y&gt;30\)</span> - Cada muestra es aleatoria simple, por lo que sus observaciones son i.i.d. dentro de cada grupo Entonces: <span class="math display">\[
+\begin{aligned}
+\hat{p}_X \sim \mathcal{N}\!\bigl(\mu_{\hat{p}_X} = \pi_X,\; \sigma_{\hat{p}_X} = \sqrt{\tfrac{\pi_X(1-\pi_X)}{n_X}}\bigr), \\ \hat{p}_Y \sim \mathcal{N}\!\bigl(\mu_{\hat{p}_Y} = \pi_Y,\; \sigma_{\hat{p}_Y} = \sqrt{\tfrac{\pi_Y(1-\pi_Y)}{n_Y}}\bigr)
+\end{aligned}
+\]</span> Con lo que se considera el contraste de la diferencia de estas normales: <span class="math display">\[
+\begin{aligned}
+H_0: \pi_X = \pi_Y \Rightarrow \pi_X - \pi_Y = 0\\
+H_1: \pi_X \neq \pi_Y \Rightarrow \pi_X - \pi_Y \neq 0
+\end{aligned}
+\]</span> Usamos los estimadores <span class="math inline">\(\hat{p}\)</span> para los parámetros poblacionales <span class="math inline">\(\pi\)</span> para ambas poblaciones, <span class="math inline">\(X\)</span> e <span class="math inline">\(Y\)</span>. Desde aquí R se encarga de estandarizar la diferencia de las dos normales y de hacer el contraste:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">prop.test</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="dv">274</span>, <span class="dv">240</span>), <span class="at">n =</span> <span class="fu">c</span>(<span class="dv">1000</span>, <span class="dv">760</span>), <span class="at">alternative =</span> <span class="st">"two.sided"</span>, <span class="at">conf.level =</span> <span class="fl">0.95</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    2-sample test for equality of proportions with continuity correction
+
+data:  c(274, 240) out of c(1000, 760)
+X-squared = 3.448, df = 1, p-value = 0.06333
+alternative hypothesis: two.sided
+95 percent confidence interval:
+ -0.086031907  0.002452959
+sample estimates:
+   prop 1    prop 2 
+0.2740000 0.3157895 </code></pre>
+</div>
+</div>
+<p>El contraste da un p-valor mayor que el nivel de significación. No existen pruebas significativas para rechazar la hipótesis nula con un nivel de confianza del 95%. Por tanto se acepta que la proporción poblacional sobre si el grupo A es el grupo favorito no ha cambiado desde hace 2 años.</p>
+</section>
+<section id="b." class="level3">
+<h3 class="anchored" data-anchor-id="b.">b.)</h3>
+<p><span class="math display">\[
+\begin{aligned}
+X=\text{\{Proporción de mujeres hace 2 años\}}\\
+Y=\text{\{Proporción de mujeres actual\}}
+\end{aligned}
+\]</span> Se utiliza el un contraste bilateral para la hipótesis: <span class="math display">\[
+\begin{aligned}
+H_0​:π_X​=π_Y​\\H_1​:π_Y​&gt;π_X​,
+\end{aligned}
+\]</span> Es decir:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">prop.test</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="fl">0.337</span>, <span class="fl">0.362</span>), <span class="at">n =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>), <span class="at">alternative =</span> <span class="st">"greater"</span>, <span class="at">conf.level =</span> <span class="fl">0.95</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in prop.test(x = c(0.337, 0.362), n = c(1, 1), alternative = "greater",
+: Chi-squared approximation may be incorrect</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    2-sample test for equality of proportions with continuity correction
+
+data:  c(0.337, 0.362) out of c(1, 1)
+X-squared = 1.6251e-32, df = 1, p-value = 0.5
+alternative hypothesis: greater
+95 percent confidence interval:
+ -1  1
+sample estimates:
+prop 1 prop 2 
+ 0.337  0.362 </code></pre>
+</div>
+</div>
+<p>Se obtiene un p-valor igual al nivel de significación, por lo que no se rechaza y en su defecto se asume la hipótesis nula.</p>
+<hr>
+<hr>
+</section>
+</section>
+</section>
+<section id="potencia.-curva-roc." class="level1">
+<h1>Potencia. Curva ROC.</h1>
+<p>El mejor valor para tomar la decisión propuesta es el 170.605 mg de Glucosa.</p>
+<hr>
+<hr>
+</section>
+<section id="contraste-chi-cuadrado-de-bondad-de-ajuste" class="level1">
+<h1>Contraste Chi-Cuadrado de Bondad de Ajuste</h1>
+<section id="ejercicio-1-1" class="level2">
+<h2 class="anchored" data-anchor-id="ejercicio-1-1">Ejercicio 1</h2>
+<p>Definimos la variable aleatoria, que en este caso es una multinomial, es decir, esta compuesta por <span class="math inline">\(i\)</span> binomiales.</p>
+<p><span class="math display">\[
+X=X_1,...,X_6=\text{\{Proporción de M&amp;Ms del color (i)\}}
+\]</span></p>
+<p>La hipótesis:</p>
+<p><span class="math display">\[
+H_0: \text{# M&amp;Ms marrones}=n*0.3,\quad\text{# M&amp;Ms amarillos}=n*0.2,\quad...\quad,\quad\text{# M&amp;Ms beige}=n*0.1
+\]</span></p>
+<p>o, también se podría decir</p>
+<p><span class="math display">\[
+H_0: \pi_{\text{marrón}}=0.3,\quad\pi_{\text{amarillo}}=0.2,\quad...\quad,\quad\pi_{\text{beige}}=0.1
+\]</span></p>
+<p>Luego</p>
+<p><span class="math display">\[
+H_1: \pi_{\text{marrón}}\neq0.3,\quad\pi_{\text{amarillo}}\neq0.2,\quad...\quad,\quad\pi_{\text{beige}}\neq0.1
+\]</span></p>
+<p>Al tomar una muestra de tamaño <span class="math inline">\(n\)</span>, se tiene:</p>
+<table class="caption-top table">
+<tbody>
+<tr class="odd">
+<td></td>
+<td>Marrón</td>
+<td>Amarillo</td>
+<td>Rojo</td>
+<td>Naranja</td>
+<td>Verde</td>
+<td>Beige</td>
+</tr>
+<tr class="even">
+<td>Expected</td>
+<td>111</td>
+<td>74</td>
+<td>74</td>
+<td>37</td>
+<td>37</td>
+<td>37</td>
+</tr>
+<tr class="odd">
+<td>Observed</td>
+<td>84</td>
+<td>79</td>
+<td>75</td>
+<td>79</td>
+<td>36</td>
+<td>47</td>
+</tr>
+</tbody>
+</table>
+<p>Y hacemos el contraste de Chi-Cuadrado, donde el estadístico observado es</p>
+<p><span class="math display">\[
+\chi^2_{\text{obs}} = \sum_{i=1}^{6} \frac{(O_i - E_i)^2}{E_i}\approx50.775
+\]</span></p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">chisq.test</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="dv">84</span>,<span class="dv">79</span>,<span class="dv">75</span>,<span class="dv">79</span>,<span class="dv">36</span>,<span class="dv">47</span>), <span class="at">p =</span> <span class="fu">c</span>(<span class="fl">0.3</span>,<span class="fl">0.2</span>,<span class="fl">0.2</span>,<span class="fl">0.1</span>,<span class="fl">0.1</span>,<span class="fl">0.1</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Chi-squared test for given probabilities
+
+data:  c(84, 79, 75, 79, 36, 47)
+X-squared = 50.775, df = 5, p-value = 9.617e-10</code></pre>
+</div>
+</div>
+<p>Simplemente mirando los resultados del experimento, se sospecha que la muestra no viene de una distribución con las proporciones dadas. Vemos que el contraste da un p-valor significativamente menor que un nivel de significación, digamos del 0.05, luego se rechaza la hipótesis nula.</p>
+</section>
+<section id="ejercicio-2-1" class="level2">
+<h2 class="anchored" data-anchor-id="ejercicio-2-1">Ejercicio 2</h2>
+<p>Se considera la variable aleatoria:</p>
+<p><span class="math display">\[
+X=\text{\{Dirección en grados en la que una paloma vuela al estar desorientada\}}
+\]</span></p>
+<p>El contraste sugerido es:</p>
+<p><span class="math display">\[
+H_0: X\sim\mathcal{U}(a=0, b=360)
+\]</span></p>
+<p>Y para hacer el contraste, lo escribimos de una forma equivalente que nos es más útil. Como esta en realidad es simplemente otra forma más general de decir que todas las direcciones son equiprobables:</p>
+<p><span class="math display">\[
+H_0: p_{[0,45)}=1/8,\quad p_{(45,90)}=1/8,\quad...,\quad p_{(315,360)}=1/8
+\]</span></p>
+<p>Nóteste que en este caso <span class="math inline">\(p\)</span> no es una proporción muestral, sino la probabilidad que <span class="math inline">\(X\)</span> tome un valor en el rango indicado.</p>
+<p>Luego la hipótesis alternativa:</p>
+<p><span class="math display">\[
+H_1:  \text{Alguna dirección no sale 1/8 de las veces}
+\]</span></p>
+<p>o, de forma equivalente,</p>
+<p><span class="math display">\[
+H_1: p_{[0,45)}\neq1/8,\quad p_{(45,90)}\neq1/8,\quad...,\quad p_{(315,360)}\neq1/8
+\]</span></p>
+<p>Con los datos observados y esperados hacemos el contraste:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">chisq.test</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="dv">12</span>,<span class="dv">16</span>,<span class="dv">17</span>,<span class="dv">15</span>,<span class="dv">13</span>,<span class="dv">20</span>,<span class="dv">17</span>,<span class="dv">10</span>), <span class="at">p =</span> <span class="fu">rep</span>(<span class="fl">0.125</span>,<span class="dv">8</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Chi-squared test for given probabilities
+
+data:  c(12, 16, 17, 15, 13, 20, 17, 10)
+X-squared = 4.8, df = 7, p-value = 0.6844</code></pre>
+</div>
+</div>
+<p>Se acepta la hipótesis nula ya que <span class="math inline">\(\alpha&lt;\text{p-value}\)</span>.</p>
+</section>
+<section id="ejercicio-3-1" class="level2">
+<h2 class="anchored" data-anchor-id="ejercicio-3-1">Ejercicio 3</h2>
+<p>La V.A.:</p>
+<p><span class="math display">\[
+X=\text{\{Color de la semilla producida (roja, amarilla o blanca)\}}
+\]</span></p>
+<p>Las hipótesis:</p>
+<p><span class="math display">\[
+\begin{aligned}
+H_0: p_{\text{roja}}=9/16,\quad p_{\text{amarilla}}=3/16,\quad p_{\text{blanca}}=4/16\\
+H_1: p_{\text{roja}}\neq9/16,\quad p_{\text{amarilla}}\neq3/16,\quad p_{\text{blanca}}\neq4/16
+\end{aligned}
+\]</span></p>
+<p>El contraste:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">chisq.test</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="dv">195</span>, <span class="dv">73</span>, <span class="dv">100</span>), <span class="at">p =</span> <span class="fu">c</span>(<span class="dv">9</span><span class="sc">/</span><span class="dv">16</span>, <span class="dv">3</span><span class="sc">/</span><span class="dv">16</span>, <span class="dv">4</span><span class="sc">/</span><span class="dv">16</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Chi-squared test for given probabilities
+
+data:  c(195, 73, 100)
+X-squared = 1.6232, df = 2, p-value = 0.4441</code></pre>
+</div>
+</div>
+<p>Si <span class="math inline">\(\alpha=0.05\)</span> se acepta la hipótesis nula. Realmente 9:3:4 es la proporción de los colores de las semillas.</p>
+<hr>
+<hr>
+</section>
+</section>
+<section id="función-de-dist.-empírica-y-contrastes-de-normalidad" class="level1">
+<h1>Función de Dist. Empírica y Contrastes de Normalidad</h1>
+<section id="ejercicio-4-1" class="level2">
+<h2 class="anchored" data-anchor-id="ejercicio-4-1">Ejercicio 4</h2>
+<section id="a.-1" class="level3">
+<h3 class="anchored" data-anchor-id="a.-1">a.)</h3>
+<p>Definimos la V.A.:</p>
+<p><span class="math display">\[
+X=\text{\{Diámetro de tornillos en mm\}}
+\]</span></p>
+<p>Y las hipótesis:</p>
+<p><span class="math display">\[
+\begin{aligned}
+H_0: X\sim\mathcal{N}(\mu=0.5,\sigma=0.002)\\
+H_1: X\nsim\mathcal{N}(\mu=0.5,\sigma=0.002)
+\end{aligned}
+\]</span></p>
+<p>Se toma una m.a.s. de <span class="math inline">\(X\)</span> de tamaño <span class="math inline">\(n=45\)</span>. Nos interesa comprobar que la muestra sigue una distribución normal. Para hacernos una idea, dibujemos la muestra:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">densityPlot</span>(T1_IV_3b<span class="sc">$</span>C1,</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>            <span class="at">main =</span> <span class="st">"Distribución de diámetros de tornillos"</span>,</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>            <span class="at">xlab =</span> <span class="st">"Diámetro (mm)"</span>,</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">ylab =</span> <span class="st">"Densidad de probabilidad"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="p2_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Parece ser normal. Para comprobarlo, se podría visualizar con <code>qqPlot</code>, pero es más adecuado recurrir a otros métodos más rigurosos. Dado que <span class="math inline">\(n&lt;50\)</span>, solo podemos usar el contraste de Shapiro-Wilk:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">shapiro.test</span>(T1_IV_3b<span class="sc">$</span>C1)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Shapiro-Wilk normality test
+
+data:  T1_IV_3b$C1
+W = 0.9414, p-value = 0.02422</code></pre>
+</div>
+</div>
+<p>Este nos da un p-valor menor que <span class="math inline">\(\alpha=0.05\)</span>, luego se rechaza la hipótesis nula y se concluye que la muestra no procede de una distribución normal.</p>
+</section>
+<section id="b.-1" class="level3">
+<h3 class="anchored" data-anchor-id="b.-1">b.)</h3>
+<p>Añadimos los datos:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">c</span>(T1_IV_3b<span class="sc">$</span>C1, <span class="fu">c</span>(<span class="fl">0.33</span>, <span class="fl">0.67</span>, <span class="fl">0.78</span>, <span class="fl">0.93</span>, <span class="fl">0.45</span>, <span class="fl">0.73</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<p>Ahora <span class="math inline">\(n=51\)</span>, es decir, <span class="math inline">\(n&gt;50\)</span>, luego estamos en condiciones para utilizar el contraste de Kolmogorov-Smirnov.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ks.test</span>(data, <span class="st">"pnorm"</span>, <span class="at">mean =</span> <span class="fl">0.5</span>, <span class="at">sd =</span> <span class="fl">0.002</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Asymptotic one-sample Kolmogorov-Smirnov test
+
+data:  data
+D = 0.16905, p-value = 0.1084
+alternative hypothesis: two-sided</code></pre>
+</div>
+</div>
+<p>Obtenemos un p-valor mayor que el nivel de significación. Aceptamos la hipótesis nula, es decir, la muestra procede de una normal <span class="math inline">\(\mathcal{N}(\mu=0.5,\sigma=0.002)\)</span>.</p>
+<p>Hagamos la visualizacion cumulativa de la distribución empírica vs.&nbsp;teórica:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>ecdf_data <span class="ot">&lt;-</span> <span class="fu">ecdf</span>(data)</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(ecdf_data,</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"Distribución empírica vs Normal teórica (CDF)"</span>,</span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"Diámetro (mm)"</span>,</span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">"Probabilidad acumulada"</span>,</span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>     <span class="at">col =</span> <span class="st">"blue"</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a><span class="fu">curve</span>(<span class="fu">pnorm</span>(x, <span class="at">mean =</span> <span class="fl">0.5</span>, <span class="at">sd =</span> <span class="fl">0.002</span>),</span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a>      <span class="at">col =</span> <span class="st">"red"</span>, </span>
+<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a>      <span class="at">lwd =</span> <span class="dv">2</span>, </span>
+<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a>      <span class="at">add =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-14"><a href="#cb36-14" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"bottomright"</span>,</span>
+<span id="cb36-15"><a href="#cb36-15" aria-hidden="true" tabindex="-1"></a>       <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">"Empírica"</span>, <span class="st">"Normal teórica"</span>),</span>
+<span id="cb36-16"><a href="#cb36-16" aria-hidden="true" tabindex="-1"></a>       <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"blue"</span>, <span class="st">"red"</span>),</span>
+<span id="cb36-17"><a href="#cb36-17" aria-hidden="true" tabindex="-1"></a>       <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="p2_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Vemos que con los datos iniciales de la muestra de tamaño <span class="math inline">\(n=45\)</span>, no eramos capaces de confirmar al 95% de confianza que la muestra procedía de una distribución normal usando un contraste Shapiro-Wilk. Pero, al aumentar el tamaño de la muestra a <span class="math inline">\(n=51\)</span>, con el contraste Kolmogorov-Smirnov, se hace una Función de Dist. Empírca (<code>ecdf</code>) cuya Función Cumulativa de Densidad (CMF) es suficientemente parecida a la CMF de una normal, con lo que con un 95% de confianza, se concluye que la muestra efectivamente viene de una distribución normal.</p>
+<p>Nótese que al aumentar el tamaño muestra <span class="math inline">\(n\)</span>, nos aproximamos más a la distribución real de la población. Esto quiere decir que cuando el tamaño de la muestra aumenta, hemos tomado una decisión más correcta.</p>
+</section>
+</section>
+<section id="ejercicio-5" class="level2">
+<h2 class="anchored" data-anchor-id="ejercicio-5">Ejercicio 5</h2>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>data_a <span class="ot">&lt;-</span> T1_IV_5</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>data_b <span class="ot">&lt;-</span> T1_IV_6</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>data_c <span class="ot">&lt;-</span> T1_IV_7</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<section id="a.-2" class="level3">
+<h3 class="anchored" data-anchor-id="a.-2">a.)</h3>
+<p>Sea</p>
+<p><span class="math display">\[
+X=\text{\{Rigidez de flexión de una muestra de tela\}}
+\]</span></p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(data_a<span class="sc">$</span>C1)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 23</code></pre>
+</div>
+</div>
+<p>Vemos que la muestra de X tiene tamaño <span class="math inline">\(n=23\)</span>. Primero visualizamos la distribución de la muestra:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">densityPlot</span>(data_a<span class="sc">$</span>C1, <span class="at">xlab=</span><span class="st">"Rigidez"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="p2_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Como <span class="math inline">\(n\)</span> es menor que 50, comprobamos si sigue una normal mediante el contraste Shapiro-Wilk:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">shapiro.test</span>(data_a<span class="sc">$</span>C1)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Shapiro-Wilk normality test
+
+data:  data_a$C1
+W = 0.83762, p-value = 0.001636</code></pre>
+</div>
+</div>
+<p>Este contraste no nos garantiza que la muestra proceda de una normal. Hacemos una transformación, teniendo en cuenta que la rigidez siempre tendrá un valor positivo. Usaremos la transformación Box-Cox. Primero hallamos <span class="math inline">\(\lambda\)</span>:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>boxcox_fit <span class="ot">&lt;-</span> <span class="fu">powerTransform</span>(data_a<span class="sc">$</span>C1)</span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>lambda <span class="ot">&lt;-</span> boxcox_fit<span class="sc">$</span>lambda</span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(lambda)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code> data_a$C1 
+-0.1236716 </code></pre>
+</div>
+</div>
+<p>Aplicamos la transformacion a la muestra:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>transformed_data_a <span class="ot">&lt;-</span> (data_a<span class="sc">$</span>C1<span class="sc">^</span>lambda <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">/</span> lambda</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<p>Volvemos a visualizar y hacer el contraste Shapiro-Wilk:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">shapiro.test</span>(transformed_data_a)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Shapiro-Wilk normality test
+
+data:  transformed_data_a
+W = 0.98252, p-value = 0.9442</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">densityPlot</span>(transformed_data_a)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="p2_files/figure-html/unnamed-chunk-26-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>En este caso, la transformación logra que la muestra siga una distribución normal.</p>
+<p>Por último, analizamos la presencia de valores anómalos en los datos originales con los correspondientes datos tipificados (z-scores), donde los anomalos serán los que z&gt;3:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>z_scores_a <span class="ot">&lt;-</span> <span class="fu">scale</span>(transformed_data_a)</span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(<span class="at">valor_transformado =</span> transformed_data_a, <span class="at">valor_original =</span> data_a<span class="sc">$</span>C1, <span class="at">z_score =</span> z_scores_a, <span class="at">anomalo =</span> <span class="fu">abs</span>(z_scores_a) <span class="sc">&gt;</span> <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>   valor_transformado valor_original     z_score anomalo
+1            2.644528           24.6 -0.32227970   FALSE
+2            2.180918           12.7 -1.44441391   FALSE
+3            2.271952           14.4 -1.22407387   FALSE
+4            2.789437           30.6  0.02846072   FALSE
+5            2.351637           16.1 -1.03120098   FALSE
+6            1.965058            9.5 -1.96688750   FALSE
+7            2.808391           31.5  0.07433647   FALSE
+8            2.398315           17.2 -0.91822024   FALSE
+9            3.061887           46.9  0.68790617   FALSE
+10           3.290095           68.3  1.24026686   FALSE
+11           2.793703           30.8  0.03878520   FALSE
+12           3.597526          116.7  1.98437878   FALSE
+13           2.954053           39.5  0.42690170   FALSE
+14           3.335812           73.8  1.35091989   FALSE
+15           3.387309           80.6  1.47556463   FALSE
+16           2.513690           20.3 -0.63896460   FALSE
+17           2.676485           25.8 -0.24493032   FALSE
+18           2.795824           30.9  0.04391923   FALSE
+19           2.949212           39.2  0.41518457   FALSE
+20           2.908920           36.8  0.31765928   FALSE
+21           3.057899           46.6  0.67825170   FALSE
+22           2.329220           15.6 -1.08545923   FALSE
+23           2.824734           32.3  0.11389516   FALSE</code></pre>
+</div>
+</div>
+</section>
+<section id="b.-2" class="level3">
+<h3 class="anchored" data-anchor-id="b.-2">b.)</h3>
+<p>Sea</p>
+<p><span class="math display">\[
+X=\text{\{Resistencia a la fractura de una placa de acero con 18% de niquel\}}
+\]</span></p>
+<p>Primero, analizamos el tamaño de la muestra y su distribución.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(data_b<span class="sc">$</span>C1)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 25</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="fu">densityPlot</span>(data_b<span class="sc">$</span>C1, <span class="at">xlab=</span><span class="st">"Resistencia"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="p2_files/figure-html/unnamed-chunk-28-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>La muestra de Y tiene un tamaño <span class="math inline">\(n=25\)</span>. Realizamos el contraste de normalidad de Shapiro-Wilk:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="fu">shapiro.test</span>(data_b<span class="sc">$</span>C1)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Shapiro-Wilk normality test
+
+data:  data_b$C1
+W = 0.87, p-value = 0.004326</code></pre>
+</div>
+</div>
+<p>Este contraste no nos garantiza que la muestra proceda de una normal. Hacemos una transformación, teniendo en cuenta que la resistencia siempre tendrá un valor positivo. Usaremos la transformación Box-Cox. Primero hallamos <span class="math inline">\(\lambda\)</span>:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>boxcox_fit <span class="ot">&lt;-</span> <span class="fu">powerTransform</span>(data_b<span class="sc">$</span>C1)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in estimateTransform.default(X, Y, weights, family, ...): Convergence
+failure: return code = 52</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>lambda <span class="ot">&lt;-</span> boxcox_fit<span class="sc">$</span>lambda</span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(lambda)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>data_b$C1 
+-5.737799 </code></pre>
+</div>
+</div>
+<p>Aplicamos la transformacion a la muestra:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a>transformed_data_b <span class="ot">&lt;-</span> (data_b<span class="sc">$</span>C1<span class="sc">^</span>lambda <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">/</span> lambda</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<p>Volvemos a visualizar y hacer el contraste Shapiro-Wilk:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="fu">shapiro.test</span>(transformed_data_b)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Shapiro-Wilk normality test
+
+data:  transformed_data_b
+W = 0.98711, p-value = 0.9821</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="fu">densityPlot</span>(transformed_data_b)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="p2_files/figure-html/unnamed-chunk-32-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>En este caso, la transformación logra que la muestra siga una distribución normal.</p>
+<p>Por último, analizamos la presencia de valores anómalos en los datos originales con los correspondientes datos tipificados (z-scores), donde los anomalos serán los que z&gt;3:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a>z_scores_b <span class="ot">&lt;-</span> <span class="fu">scale</span>(transformed_data_b)</span>
+<span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(<span class="at">valor_transformado =</span> transformed_data_b, <span class="at">valor_original =</span> data_b<span class="sc">$</span>C1, <span class="at">z_score =</span> z_scores_b, <span class="at">anomalo =</span> <span class="fu">abs</span>(z_scores_b) <span class="sc">&gt;</span> <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>   valor_transformado valor_original      z_score anomalo
+1           0.1742828           69.5 -2.397066452   FALSE
+2           0.1742828           71.9 -1.366443014   FALSE
+3           0.1742828           72.6 -1.107335064   FALSE
+4           0.1742828           73.1 -0.932259338   FALSE
+5           0.1742828           73.3 -0.864483654   FALSE
+6           0.1742828           73.5 -0.797910886   FALSE
+7           0.1742828           74.1 -0.605410073   FALSE
+8           0.1742828           74.2 -0.574340490   FALSE
+9           0.1742828           75.3 -0.250446960   FALSE
+10          0.1742828           75.5 -0.194941013   FALSE
+11          0.1742828           75.7 -0.140363028   FALSE
+12          0.1742828           75.8 -0.113486464   FALSE
+13          0.1742828           76.1 -0.034162794   FALSE
+14          0.1742828           76.2 -0.008179824   FALSE
+15          0.1742828           76.9  0.167342699   FALSE
+16          0.1742828           77.0  0.191538481   FALSE
+17          0.1742828           77.9  0.400158358   FALSE
+18          0.1742828           78.1  0.444322533   FALSE
+19          0.1742828           79.6  0.752646903   FALSE
+20          0.1742828           79.7  0.771824809   FALSE
+21          0.1742828           79.9  0.809733825   FALSE
+22          0.1742828           80.1  0.846989829   FALSE
+23          0.1742828           82.2  1.202812168   FALSE
+24          0.1742828           83.7  1.421914593   FALSE
+25          0.1742828           93.7  2.377098059   FALSE</code></pre>
+</div>
+</div>
+</section>
+<section id="c." class="level3">
+<h3 class="anchored" data-anchor-id="c.">c.)</h3>
+<p>Sea</p>
+<p><span class="math display">\[
+X=\text{\{Resistencia a la flexión de muestras de cemento complementadas con arcilla quemada\}}
+\]</span> Primero, analizamos el tamaño de la muestra y su distribución.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(data_c<span class="sc">$</span>C1)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 30</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb68"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a><span class="fu">densityPlot</span>(data_c<span class="sc">$</span>C1, <span class="at">xlab=</span><span class="st">"Resistencia"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="p2_files/figure-html/unnamed-chunk-34-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>La muestra de Y tiene un tamaño <span class="math inline">\(n=30\)</span>. Realizamos el contraste de normalidad de Shapiro-Wilk:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb69"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="fu">shapiro.test</span>(data_c<span class="sc">$</span>C1)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Shapiro-Wilk normality test
+
+data:  data_c$C1
+W = 0.94735, p-value = 0.1435</code></pre>
+</div>
+</div>
+<p>Este contraste no nos garantiza que la muestra proceda de una normal. Hacemos una transformación, teniendo en cuenta que la resistencia siempre tendrá un valor positivo. Usaremos la transformación Box-Cox. Primero hallamos <span class="math inline">\(\lambda\)</span>:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb71"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a>boxcox_fit <span class="ot">&lt;-</span> <span class="fu">powerTransform</span>(data_c<span class="sc">$</span>C1)</span>
+<span id="cb71-2"><a href="#cb71-2" aria-hidden="true" tabindex="-1"></a>lambda <span class="ot">&lt;-</span> boxcox_fit<span class="sc">$</span>lambda</span>
+<span id="cb71-3"><a href="#cb71-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(lambda)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>  data_c$C1 
+-0.05950012 </code></pre>
+</div>
+</div>
+<p>Aplicamos la transformacion a la muestra:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb73"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a>transformed_data_c <span class="ot">&lt;-</span> (data_c<span class="sc">$</span>C1<span class="sc">^</span>lambda <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">/</span> lambda</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<p>Volvemos a visualizar y hacer el contraste Shapiro-Wilk:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb74"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a><span class="fu">shapiro.test</span>(transformed_data_c)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Shapiro-Wilk normality test
+
+data:  transformed_data_c
+W = 0.98244, p-value = 0.886</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb76"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a><span class="fu">densityPlot</span>(transformed_data_c)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="p2_files/figure-html/unnamed-chunk-38-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>En este caso, la transformación logra que la muestra siga una distribución normal.</p>
+<p>Por último, analizamos la presencia de valores anómalos en los datos originales con los correspondientes datos tipificados (z-scores), donde los anomalos serán los que z&gt;3:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb77"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a>z_scores_c <span class="ot">&lt;-</span> <span class="fu">scale</span>(transformed_data_c)</span>
+<span id="cb77-2"><a href="#cb77-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(<span class="at">valor_transformado =</span> transformed_data_c, <span class="at">valor_original =</span> data_c<span class="sc">$</span>C1, <span class="at">z_score =</span> z_scores_c, <span class="at">anomalo =</span> <span class="fu">abs</span>(z_scores_c) <span class="sc">&gt;</span> <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>   valor_transformado valor_original     z_score anomalo
+1            4.726024            257 -2.39614921   FALSE
+2            4.897936            327 -1.16838465   FALSE
+3            4.875909            317 -1.32570010   FALSE
+4            4.836716            300 -1.60560440   FALSE
+5            4.925528            340 -0.97132855   FALSE
+6            4.925528            340 -0.97132855   FALSE
+7            4.931737            343 -0.92698777   FALSE
+8            4.992715            374 -0.49149346   FALSE
+9            4.998330            377 -0.45139469   FALSE
+10           5.014894            386 -0.33309664   FALSE
+11           5.009419            383 -0.37220166   FALSE
+12           5.027497            393 -0.24308997   FALSE
+13           5.052004            407 -0.06806484   FALSE
+14           5.052004            407 -0.06806484   FALSE
+15           5.096842            434  0.25215859   FALSE
+16           5.085508            427  0.17120791   FALSE
+17           5.106405            440  0.32045143   FALSE
+18           5.052004            407 -0.06806484   FALSE
+19           5.122039            450  0.43210922   FALSE
+20           5.106405            440  0.32045143   FALSE
+21           5.131244            456  0.49784907   FALSE
+22           5.137310            460  0.54116848   FALSE
+23           5.131244            456  0.49784907   FALSE
+24           5.161026            476  0.71054266   FALSE
+25           5.166823            480  0.75194410   FALSE
+26           5.181094            490  0.85386893   FALSE
+27           5.190902            497  0.92391355   FALSE
+28           5.230031            526  1.20336705   FALSE
+29           5.255708            546  1.38674260   FALSE
+30           5.425216            700  2.59733013   FALSE</code></pre>
+</div>
+</div>
+<p>::: {#Lab and Data} <a href="https://miaulario.unavarra.es/access/content/group/2025_0_504202_1_G/Tema%201/Lab_2.Rmd">Lab_02.Rmd</a></p>
+<p><a href="https://miaulario.unavarra.es/access/content/group/2025_0_504202_1_G/Tema%201/Datos_Lab_2.zip">Data_lab_02</a> :::</p>
+</section>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
